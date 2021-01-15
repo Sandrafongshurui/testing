@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!--Libraries-->
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no,
+		initial-scale=1"
+		/>
+
+		<script src="lib/fastclick.js"></script>
+		<script src="lib/jquery.min.js"></script>
+		<script src="lib/anime.min.js"></script>
+		<script src="lib/aframe.min.js"></script>
+		<script src="lib/aframe-look-at-component.min.js"></script>
+		<script src="lib/aframe-animation-component.min.js"></script>
+		<script src="lib/aframe-event-set-component.min.js"></script>
+		<link rel="stylesheet" href="assets/bttn.min.css" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" />
+		<script src="lib/aframe-rounded-component.min.js"></script>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+			rel="stylesheet"
+		/>
+		<script src="lib/horizontalDialog.min.js"></script>
+		<script src="lib/mcq-lib.min.js"></script>
+		<script src="lib/script.min.js"></script>
+		<link rel="stylesheet" href="assets/animate.min.css" />
+		<link rel="stylesheet" href="loading.css" />
+		<link rel="stylesheet" href="styles.min.css" />
+		<title>Energy & Chemical Training Centre</title>
+	</head>
+	<body>
+		<div id="splashscreen">
+			<img id="logo" src="assets/ixtc.png" />
+
+			<div class="wrapper">
+				<div class="box-wrap">
+					<div class="box one"></div>
+					<div class="box two"></div>
+					<div class="box three"></div>
+					<div class="box four"></div>
+					<div class="box five"></div>
+					<div class="box six"></div>
+				</div>
+			</div>
+		</div>
+		<div id="contentPage">
+			<div id="leftHalf"></div>
+			<div id="rightHalf">
+				<div id="content">
+					<h2 id="title">Energy & Chemical</h2>
+					<h2 id="subtitle">Training Centre</h2>
+					<p id="description">
+						Welcome to Energy & Chemical Training Centre! In this application,
+						you will be able to learn about the Emergency Shutdown Procedure.
+						There are four spots that you need to visit to complete the
+						procedure. Worry not, the numbered icons will guide you through the
+						entire process. Once done, please do test yourself by clicking the
+						Assessment Mode button on the top right of the page or enter
+						Assessment Mode now!
+					</p>
+					<div id="toggleBtn">
+						<input
+							onclick="toggleAssesst()"
+							id="toggleAssessment"
+							type="checkbox"
+						/>
+						<p id="assessmenttext">Assessment Mode</p>
+					</div>
+					<button
+						id="btnEnter"
+						onclick="enterVR()"
+						class="bttn-unite bttn-lg bttn-default"
+					>
+						Enter
+					</button>
+				</div>
+			</div>
+		</div>
+		<div id="aframeCanvas">
+			<!-- <div id="appState">Assessment Mode</div> -->
+			<!-- <div class="alert">
+				<span
+					class="closebtn"
+					onclick="this.parentElement.style.display='none';"
+					>&times;</span
+				>
+				<strong>Fail!</strong> Please go through every dialog before accessing
+				assessment mode!
+			</div> -->
+			<!-- <div id="leftArrow" onclick="prevscene()"></div>
+			<div id="rightArrow" onclick="nextscene()"></div> -->
+			<svg
+				class="filtermode"
+				width="5"
+				height="1000"
+				viewBox="0 0 5 1000"
+				fill="none"
+				style="left: 40px; top: 40px"
+			>
+				<rect
+					style="opacity: 0"
+					id="topright"
+					width="5"
+					height="5"
+					fill="white"
+				/>
+			</svg>
+			<svg
+				class="filtermode"
+				width="2000"
+				height="5"
+				viewBox="0 0 2000 5"
+				fill="none"
+				style="left: 40px; top: 40px"
+			>
+				<rect
+					style="opacity: 0"
+					id="topleft"
+					width="5"
+					height="5"
+					fill="white"
+				/>
+			</svg>
+			<svg
+				class="filtermode"
+				width="5"
+				height="1000"
+				viewBox="0 0 5 1000"
+				fill="none"
+				style="right: 40px; bottom: 40px"
+			>
+				<rect
+					style="opacity: 0"
+					id="bottomright"
+					width="5"
+					height="5"
+					fill="white"
+					y="1000"
+				/>
+			</svg>
+			<svg
+				class="filtermode"
+				width="2000"
+				height="5"
+				viewBox="0 0 2000 5"
+				fill="none"
+				style="right: 40px; bottom: 40px"
+			>
+				<rect
+					style="opacity: 0"
+					id="bottomleft"
+					width="5"
+					height="5"
+					x="2000"
+					fill="white"
+				/>
+			</svg>
+			<div class="tooltip">
+				<svg
+					id="assessment"
+					width="235"
+					height="64"
+					viewBox="0 0 235 64"
+					fill="none"
+				>
+					<rect
+						onclick="assestMode()"
+						id="morph"
+						x="171"
+						width="64"
+						height="64"
+						rx="32"
+						fill="white"
+					/>
+					<path
+						onclick="assestMode()"
+						d="M201.981 36.16V21.49H204.021V36.16H201.981ZM201.981 43V39.64H204.021V43H201.981Z"
+						fill="#456AB7"
+					/>
+					<path
+						id="morphtext"
+						style="opacity: 0"
+						d="M34.7368 26.22H35.7988L41.1088 39H39.7768L38.1208 35.004H32.3788L30.7408 39H29.3908L34.7368 26.22ZM37.8328 34.014L35.2588 27.696L32.6488 34.014H37.8328ZM45.6438 39.18C44.8758 39.18 44.1618 39.054 43.5018 38.802C42.8418 38.55 42.2718 38.166 41.7918 37.65L42.2958 36.786C42.8238 37.278 43.3518 37.638 43.8798 37.866C44.4198 38.082 44.9898 38.19 45.5898 38.19C46.3218 38.19 46.9158 38.046 47.3718 37.758C47.8278 37.458 48.0558 37.032 48.0558 36.48C48.0558 36.108 47.9418 35.826 47.7138 35.634C47.4978 35.43 47.1798 35.268 46.7598 35.148C46.3518 35.016 45.8598 34.878 45.2838 34.734C44.6358 34.554 44.0898 34.368 43.6458 34.176C43.2138 33.972 42.8838 33.72 42.6558 33.42C42.4398 33.108 42.3318 32.706 42.3318 32.214C42.3318 31.602 42.4818 31.098 42.7818 30.702C43.0938 30.294 43.5138 29.988 44.0418 29.784C44.5818 29.568 45.1818 29.46 45.8418 29.46C46.5618 29.46 47.1978 29.574 47.7498 29.802C48.3018 30.03 48.7518 30.348 49.0998 30.756L48.5058 31.584C48.1698 31.2 47.7678 30.918 47.2998 30.738C46.8438 30.546 46.3338 30.45 45.7698 30.45C45.3858 30.45 45.0198 30.504 44.6718 30.612C44.3238 30.708 44.0358 30.876 43.8078 31.116C43.5918 31.344 43.4838 31.662 43.4838 32.07C43.4838 32.406 43.5678 32.67 43.7358 32.862C43.9038 33.042 44.1558 33.198 44.4918 33.33C44.8278 33.45 45.2418 33.582 45.7338 33.726C46.4418 33.918 47.0598 34.116 47.5878 34.32C48.1158 34.512 48.5238 34.764 48.8118 35.076C49.0998 35.388 49.2438 35.826 49.2438 36.39C49.2438 37.266 48.9138 37.95 48.2538 38.442C47.5938 38.934 46.7238 39.18 45.6438 39.18ZM54.345 39.18C53.577 39.18 52.863 39.054 52.203 38.802C51.543 38.55 50.973 38.166 50.493 37.65L50.997 36.786C51.525 37.278 52.053 37.638 52.581 37.866C53.121 38.082 53.691 38.19 54.291 38.19C55.023 38.19 55.617 38.046 56.073 37.758C56.529 37.458 56.757 37.032 56.757 36.48C56.757 36.108 56.643 35.826 56.415 35.634C56.199 35.43 55.881 35.268 55.461 35.148C55.053 35.016 54.561 34.878 53.985 34.734C53.337 34.554 52.791 34.368 52.347 34.176C51.915 33.972 51.585 33.72 51.357 33.42C51.141 33.108 51.033 32.706 51.033 32.214C51.033 31.602 51.183 31.098 51.483 30.702C51.795 30.294 52.215 29.988 52.743 29.784C53.283 29.568 53.883 29.46 54.543 29.46C55.263 29.46 55.899 29.574 56.451 29.802C57.003 30.03 57.453 30.348 57.801 30.756L57.207 31.584C56.871 31.2 56.469 30.918 56.001 30.738C55.545 30.546 55.035 30.45 54.471 30.45C54.087 30.45 53.721 30.504 53.373 30.612C53.025 30.708 52.737 30.876 52.509 31.116C52.293 31.344 52.185 31.662 52.185 32.07C52.185 32.406 52.269 32.67 52.437 32.862C52.605 33.042 52.857 33.198 53.193 33.33C53.529 33.45 53.943 33.582 54.435 33.726C55.143 33.918 55.761 34.116 56.289 34.32C56.817 34.512 57.225 34.764 57.513 35.076C57.801 35.388 57.945 35.826 57.945 36.39C57.945 37.266 57.615 37.95 56.955 38.442C56.295 38.934 55.425 39.18 54.345 39.18ZM64.0182 39.18C63.3462 39.18 62.7222 39.054 62.1462 38.802C61.5702 38.538 61.0722 38.184 60.6522 37.74C60.2322 37.284 59.9022 36.762 59.6622 36.174C59.4342 35.586 59.3202 34.956 59.3202 34.284C59.3202 33.408 59.5182 32.604 59.9142 31.872C60.3222 31.14 60.8802 30.558 61.5882 30.126C62.2962 29.682 63.1002 29.46 64.0002 29.46C64.9242 29.46 65.7282 29.682 66.4122 30.126C67.1082 30.57 67.6542 31.158 68.0502 31.89C68.4462 32.61 68.6442 33.402 68.6442 34.266C68.6442 34.362 68.6442 34.458 68.6442 34.554C68.6442 34.638 68.6382 34.704 68.6262 34.752H60.5982C60.6582 35.424 60.8442 36.024 61.1562 36.552C61.4802 37.068 61.8942 37.482 62.3982 37.794C62.9142 38.094 63.4722 38.244 64.0722 38.244C64.6842 38.244 65.2602 38.088 65.8002 37.776C66.3522 37.464 66.7362 37.056 66.9522 36.552L68.0142 36.84C67.8222 37.284 67.5282 37.686 67.1322 38.046C66.7362 38.406 66.2682 38.688 65.7282 38.892C65.2002 39.084 64.6302 39.18 64.0182 39.18ZM60.5622 33.87H67.4922C67.4442 33.186 67.2582 32.586 66.9342 32.07C66.6222 31.554 66.2082 31.152 65.6922 30.864C65.1882 30.564 64.6302 30.414 64.0182 30.414C63.4062 30.414 62.8482 30.564 62.3442 30.864C61.8402 31.152 61.4262 31.56 61.1022 32.088C60.7902 32.604 60.6102 33.198 60.5622 33.87ZM73.6106 39.18C72.8426 39.18 72.1286 39.054 71.4686 38.802C70.8086 38.55 70.2386 38.166 69.7586 37.65L70.2626 36.786C70.7906 37.278 71.3186 37.638 71.8466 37.866C72.3866 38.082 72.9566 38.19 73.5566 38.19C74.2886 38.19 74.8826 38.046 75.3386 37.758C75.7946 37.458 76.0226 37.032 76.0226 36.48C76.0226 36.108 75.9086 35.826 75.6806 35.634C75.4646 35.43 75.1466 35.268 74.7266 35.148C74.3186 35.016 73.8266 34.878 73.2506 34.734C72.6026 34.554 72.0566 34.368 71.6126 34.176C71.1806 33.972 70.8506 33.72 70.6226 33.42C70.4066 33.108 70.2986 32.706 70.2986 32.214C70.2986 31.602 70.4486 31.098 70.7486 30.702C71.0606 30.294 71.4806 29.988 72.0086 29.784C72.5486 29.568 73.1486 29.46 73.8086 29.46C74.5286 29.46 75.1646 29.574 75.7166 29.802C76.2686 30.03 76.7186 30.348 77.0666 30.756L76.4726 31.584C76.1366 31.2 75.7346 30.918 75.2666 30.738C74.8106 30.546 74.3006 30.45 73.7366 30.45C73.3526 30.45 72.9866 30.504 72.6386 30.612C72.2906 30.708 72.0026 30.876 71.7746 31.116C71.5586 31.344 71.4506 31.662 71.4506 32.07C71.4506 32.406 71.5346 32.67 71.7026 32.862C71.8706 33.042 72.1226 33.198 72.4586 33.33C72.7946 33.45 73.2086 33.582 73.7006 33.726C74.4086 33.918 75.0266 34.116 75.5546 34.32C76.0826 34.512 76.4906 34.764 76.7786 35.076C77.0666 35.388 77.2106 35.826 77.2106 36.39C77.2106 37.266 76.8806 37.95 76.2206 38.442C75.5606 38.934 74.6906 39.18 73.6106 39.18ZM82.3118 39.18C81.5438 39.18 80.8298 39.054 80.1698 38.802C79.5098 38.55 78.9398 38.166 78.4598 37.65L78.9638 36.786C79.4918 37.278 80.0198 37.638 80.5478 37.866C81.0878 38.082 81.6578 38.19 82.2578 38.19C82.9898 38.19 83.5838 38.046 84.0398 37.758C84.4958 37.458 84.7238 37.032 84.7238 36.48C84.7238 36.108 84.6098 35.826 84.3818 35.634C84.1658 35.43 83.8478 35.268 83.4278 35.148C83.0198 35.016 82.5278 34.878 81.9518 34.734C81.3038 34.554 80.7578 34.368 80.3138 34.176C79.8818 33.972 79.5518 33.72 79.3238 33.42C79.1078 33.108 78.9998 32.706 78.9998 32.214C78.9998 31.602 79.1498 31.098 79.4498 30.702C79.7618 30.294 80.1818 29.988 80.7098 29.784C81.2498 29.568 81.8498 29.46 82.5098 29.46C83.2298 29.46 83.8658 29.574 84.4178 29.802C84.9698 30.03 85.4198 30.348 85.7678 30.756L85.1738 31.584C84.8378 31.2 84.4358 30.918 83.9678 30.738C83.5118 30.546 83.0018 30.45 82.4378 30.45C82.0538 30.45 81.6878 30.504 81.3398 30.612C80.9918 30.708 80.7038 30.876 80.4758 31.116C80.2598 31.344 80.1518 31.662 80.1518 32.07C80.1518 32.406 80.2358 32.67 80.4038 32.862C80.5718 33.042 80.8238 33.198 81.1598 33.33C81.4958 33.45 81.9098 33.582 82.4018 33.726C83.1098 33.918 83.7278 34.116 84.2558 34.32C84.7838 34.512 85.1918 34.764 85.4798 35.076C85.7678 35.388 85.9118 35.826 85.9118 36.39C85.9118 37.266 85.5818 37.95 84.9218 38.442C84.2618 38.934 83.3918 39.18 82.3118 39.18ZM101.885 39H100.661V33.762C100.661 32.67 100.487 31.866 100.139 31.35C99.791 30.834 99.275 30.576 98.591 30.576C97.883 30.576 97.247 30.828 96.683 31.332C96.131 31.836 95.741 32.484 95.513 33.276V39H94.289V33.762C94.289 32.658 94.121 31.854 93.785 31.35C93.449 30.834 92.933 30.576 92.237 30.576C91.541 30.576 90.911 30.822 90.347 31.314C89.783 31.806 89.387 32.454 89.159 33.258V39H87.935V29.622H89.051V31.746C89.447 31.014 89.951 30.45 90.563 30.054C91.187 29.658 91.877 29.46 92.633 29.46C93.413 29.46 94.043 29.682 94.523 30.126C95.003 30.57 95.297 31.152 95.405 31.872C95.837 31.08 96.353 30.48 96.953 30.072C97.565 29.664 98.255 29.46 99.023 29.46C99.551 29.46 99.995 29.556 100.355 29.748C100.727 29.94 101.021 30.216 101.237 30.576C101.465 30.924 101.627 31.35 101.723 31.854C101.831 32.346 101.885 32.898 101.885 33.51V39ZM108.526 39.18C107.854 39.18 107.23 39.054 106.654 38.802C106.078 38.538 105.58 38.184 105.16 37.74C104.74 37.284 104.41 36.762 104.17 36.174C103.942 35.586 103.828 34.956 103.828 34.284C103.828 33.408 104.026 32.604 104.422 31.872C104.83 31.14 105.388 30.558 106.096 30.126C106.804 29.682 107.608 29.46 108.508 29.46C109.432 29.46 110.236 29.682 110.92 30.126C111.616 30.57 112.162 31.158 112.558 31.89C112.954 32.61 113.152 33.402 113.152 34.266C113.152 34.362 113.152 34.458 113.152 34.554C113.152 34.638 113.146 34.704 113.134 34.752H105.106C105.166 35.424 105.352 36.024 105.664 36.552C105.988 37.068 106.402 37.482 106.906 37.794C107.422 38.094 107.98 38.244 108.58 38.244C109.192 38.244 109.768 38.088 110.308 37.776C110.86 37.464 111.244 37.056 111.46 36.552L112.522 36.84C112.33 37.284 112.036 37.686 111.64 38.046C111.244 38.406 110.776 38.688 110.236 38.892C109.708 39.084 109.138 39.18 108.526 39.18ZM105.07 33.87H112C111.952 33.186 111.766 32.586 111.442 32.07C111.13 31.554 110.716 31.152 110.2 30.864C109.696 30.564 109.138 30.414 108.526 30.414C107.914 30.414 107.356 30.564 106.852 30.864C106.348 31.152 105.934 31.56 105.61 32.088C105.298 32.604 105.118 33.198 105.07 33.87ZM122.924 39H121.7V33.762C121.7 32.658 121.538 31.854 121.214 31.35C120.89 30.834 120.38 30.576 119.684 30.576C119.204 30.576 118.73 30.696 118.262 30.936C117.794 31.164 117.38 31.482 117.02 31.89C116.672 32.286 116.42 32.742 116.264 33.258V39H115.04V29.622H116.156V31.746C116.408 31.29 116.738 30.894 117.146 30.558C117.554 30.21 118.016 29.94 118.532 29.748C119.048 29.556 119.582 29.46 120.134 29.46C120.65 29.46 121.088 29.556 121.448 29.748C121.808 29.94 122.096 30.216 122.312 30.576C122.528 30.924 122.684 31.35 122.78 31.854C122.876 32.346 122.924 32.898 122.924 33.51V39ZM129.947 38.55C129.851 38.586 129.701 38.652 129.497 38.748C129.293 38.844 129.047 38.928 128.759 39C128.471 39.072 128.159 39.108 127.823 39.108C127.475 39.108 127.145 39.042 126.833 38.91C126.533 38.778 126.293 38.58 126.113 38.316C125.933 38.04 125.843 37.704 125.843 37.308V30.594H124.547V29.622H125.843V26.454H127.067V29.622H129.227V30.594H127.067V36.966C127.091 37.302 127.211 37.554 127.427 37.722C127.655 37.89 127.913 37.974 128.201 37.974C128.537 37.974 128.843 37.92 129.119 37.812C129.395 37.692 129.563 37.608 129.623 37.56L129.947 38.55ZM147.638 39V28.596L143.012 36.678H142.22L137.576 28.596V39H136.316V26.22H137.612L142.598 34.968L147.62 26.22H148.898V39H147.638ZM155.704 39.18C155.032 39.18 154.408 39.054 153.832 38.802C153.268 38.538 152.776 38.184 152.356 37.74C151.948 37.284 151.63 36.768 151.402 36.192C151.174 35.604 151.06 34.986 151.06 34.338C151.06 33.666 151.174 33.042 151.402 32.466C151.63 31.878 151.954 31.362 152.374 30.918C152.794 30.462 153.286 30.108 153.85 29.856C154.426 29.592 155.05 29.46 155.722 29.46C156.394 29.46 157.012 29.592 157.576 29.856C158.14 30.108 158.632 30.462 159.052 30.918C159.472 31.362 159.796 31.878 160.024 32.466C160.252 33.042 160.366 33.666 160.366 34.338C160.366 34.986 160.252 35.604 160.024 36.192C159.796 36.768 159.472 37.284 159.052 37.74C158.644 38.184 158.152 38.538 157.576 38.802C157.012 39.054 156.388 39.18 155.704 39.18ZM152.302 34.356C152.302 35.052 152.452 35.688 152.752 36.264C153.064 36.828 153.478 37.278 153.994 37.614C154.51 37.938 155.08 38.1 155.704 38.1C156.328 38.1 156.898 37.932 157.414 37.596C157.93 37.26 158.344 36.804 158.656 36.228C158.968 35.64 159.124 35.004 159.124 34.32C159.124 33.624 158.968 32.988 158.656 32.412C158.344 31.836 157.93 31.38 157.414 31.044C156.898 30.708 156.328 30.54 155.704 30.54C155.08 30.54 154.51 30.714 153.994 31.062C153.49 31.41 153.082 31.872 152.77 32.448C152.458 33.012 152.302 33.648 152.302 34.356ZM161.783 34.338C161.783 33.45 161.963 32.64 162.323 31.908C162.695 31.164 163.205 30.57 163.853 30.126C164.501 29.682 165.239 29.46 166.067 29.46C166.847 29.46 167.543 29.67 168.155 30.09C168.779 30.498 169.265 30.996 169.613 31.584V25.86H170.837V37.524C170.837 37.692 170.873 37.818 170.945 37.902C171.017 37.974 171.125 38.016 171.269 38.028V39C171.029 39.036 170.843 39.048 170.711 39.036C170.459 39.024 170.237 38.922 170.045 38.73C169.853 38.538 169.757 38.328 169.757 38.1V37.182C169.385 37.794 168.881 38.28 168.245 38.64C167.609 39 166.949 39.18 166.265 39.18C165.617 39.18 165.017 39.048 164.465 38.784C163.925 38.52 163.451 38.16 163.043 37.704C162.647 37.248 162.335 36.732 162.107 36.156C161.891 35.568 161.783 34.962 161.783 34.338ZM169.613 35.778V32.88C169.457 32.448 169.205 32.058 168.857 31.71C168.509 31.35 168.113 31.068 167.669 30.864C167.237 30.648 166.805 30.54 166.373 30.54C165.869 30.54 165.413 30.648 165.005 30.864C164.597 31.068 164.243 31.35 163.943 31.71C163.655 32.07 163.433 32.478 163.277 32.934C163.121 33.39 163.043 33.858 163.043 34.338C163.043 34.842 163.127 35.322 163.295 35.778C163.475 36.234 163.727 36.642 164.051 37.002C164.375 37.35 164.747 37.62 165.167 37.812C165.587 38.004 166.043 38.1 166.535 38.1C166.847 38.1 167.171 38.04 167.507 37.92C167.843 37.8 168.161 37.638 168.461 37.434C168.773 37.218 169.031 36.966 169.235 36.678C169.439 36.39 169.565 36.09 169.613 35.778ZM177.661 39.18C176.989 39.18 176.365 39.054 175.789 38.802C175.213 38.538 174.715 38.184 174.295 37.74C173.875 37.284 173.545 36.762 173.305 36.174C173.077 35.586 172.963 34.956 172.963 34.284C172.963 33.408 173.161 32.604 173.557 31.872C173.965 31.14 174.523 30.558 175.231 30.126C175.939 29.682 176.743 29.46 177.643 29.46C178.567 29.46 179.371 29.682 180.055 30.126C180.751 30.57 181.297 31.158 181.693 31.89C182.089 32.61 182.287 33.402 182.287 34.266C182.287 34.362 182.287 34.458 182.287 34.554C182.287 34.638 182.281 34.704 182.269 34.752H174.241C174.301 35.424 174.487 36.024 174.799 36.552C175.123 37.068 175.537 37.482 176.041 37.794C176.557 38.094 177.115 38.244 177.715 38.244C178.327 38.244 178.903 38.088 179.443 37.776C179.995 37.464 180.379 37.056 180.595 36.552L181.657 36.84C181.465 37.284 181.171 37.686 180.775 38.046C180.379 38.406 179.911 38.688 179.371 38.892C178.843 39.084 178.273 39.18 177.661 39.18ZM174.205 33.87H181.135C181.087 33.186 180.901 32.586 180.577 32.07C180.265 31.554 179.851 31.152 179.335 30.864C178.831 30.564 178.273 30.414 177.661 30.414C177.049 30.414 176.491 30.564 175.987 30.864C175.483 31.152 175.069 31.56 174.745 32.088C174.433 32.604 174.253 33.198 174.205 33.87Z"
+						fill="#456AB7"
+					/>
+				</svg>
+				<div class="tooltiptext">Click to enter assessment mode!</div>
+			</div>
+			<div id="blocker"></div>
+			<div id="controlPopup">
+				<div id="popupContainer" onclick="slideOut(this)">
+					<p id="popupTitle">Controls</p>
+					<div id="popupContent">
+						<span> Click</span>
+						<img class="popupIcons" src="assets/mouse.png" />
+						<span>+ Drag to move around </span>
+						<div class="break"></div>
+						<div class="break"></div>
+						<span>Click</span>
+						<img id="arrowIcon" class="popupIcons" src="assets/arrow.png" />
+						<span>to teleport</span>
+						<div class="break"></div>
+						<span>Click</span>
+						<img class="popupIcons" src="assets/question1.png" />
+						<span>to follow Emergency Procedure Process</span>
+						<div class="break"></div>
+						<span>Click</span>
+						<img class="popupIcons" src="assets/mcq1.png" />
+						<span>to answer multiple choice question</span>
+						<div class="break"></div>
+						<span>Hover over</span>
+						<img class="popupIcons" src="assets/plus.png" />
+						<span>for machine information</span>
+						<div class="break"></div>
+						<span>Click</span>
+						<img class="popupIcons" src="assets/assessment.png" />
+						<span>to enter assessment mode</span>
+					</div>
+				</div>
+			</div>
+			<div id="assessmentPopup">
+				<div id="assessmentContainer" onclick="slideOut(this)">
+					<p id="assessmentTitle">Assessment Mode</p>
+					<div id="assessmentContent">
+						<span>Click the</span>
+						<img class="popupIcons" src="assets/question.png" /><span>
+							, in the correct order to complete</span
+						><span> the Emergency Shutdown Procedure. </span>
+					</div>
+				</div>
+			</div>
+			<!--Aframe canvas-->
+			<a-scene>
+				<!--Images Collection-->
+				<a-assets>
+					<img id="loc1" src="360Images/Entrance.jpg" />
+					<img id="loc2" src="360Images/Lobby.jpg" />
+					<img id="loc3" src="360Images/Doorway.jpg" />
+					<img id="loc4" src="360Images/Ladder.jpg" />
+					<img id="loc5" src="360Images/LCP201.jpg" />
+					<img id="loc6" src="360Images/Center.jpg" />
+					<img id="loc7" src="360Images/LCP302.jpg" />
+					<img id="loc8" src="360Images/Platform.jpg" />
+					<img id="loc9" src="360Images/C301.jpg" />
+					<img id="loc10" src="360Images/T301.jpg" />
+					<img id="loc11" src="360Images/C201.jpg" />
+					<img id="loc12" src="360Images/T102.jpg" />
+					<img id="loc13" src="360Images/Extinguisher.jpg" />
+					<img id="loc14" src="360Images/Lab.jpg" />
+					<img id="loc15" src="360Images/Pathway.jpg" />
+					<img id="arrow" src="assets/arrow.png" />
+				</a-assets>
+
+				<!--360 Image-->
+				<a-sky id="skybox" radius="10" src="#loc1" rotation="0 270 0"> </a-sky>
+
+				<!--Camera & Cursor-->
+				<a-entity
+					id="cam"
+					position="0 0 0"
+					camera
+					look-controls="reverseMouseDrag: true; reverseTouchDrag: true;"
+					wasd-controls-enabled="false"
+					cursor="rayOrigin: mouse"
+				>
+				</a-entity>
+				<!--Hotspot UI-->
+				<a-entity id="spots" hotspots>
+					<a-entity id="group-point1">
+						<a-image
+							id="p1loc2spot"
+							class="arrowPointer"
+							spot="linkto:#loc2;spotgroup:group-point2;
+						nameLink:Lobby;"
+							position="8 -2 -2"
+							rotation="90 105 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point2" visible="false">
+						<a-image
+							id="p2loc1spot"
+							class="arrowPointer"
+							spot="linkto:#loc1;spotgroup:group-point1;
+						nameLink:Entrance;"
+							position="-7.1 -2 0.8"
+							rotation="90 270 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p2loc3spot"
+							class="arrowPointer"
+							spot="linkto:#loc3;spotgroup:group-point3;
+						nameLink:Doorway;"
+							position="0.3 -1.3 -6.2"
+							rotation="0 180 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="quest"
+							position="-2.1 0.9 -3"
+							dialog-question="
+		  question: What are the operating hours of the wafer lab?;
+          answer: /09:00 - 17:00()09:00 - 18:00()10:00 - 17:00()10:00 - 18:00;"
+						></a-entity>
+					</a-entity>
+					<a-entity id="group-point3" visible="false">
+						<a-image
+							id="p3loc2spot"
+							class="arrowPointer"
+							spot="linkto:#loc2;spotgroup:group-point2;
+						nameLink:Lobby;"
+							position="0.33 -2 3.4"
+							rotation="0 0 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p3loc4spot"
+							class="arrowPointer"
+							spot="linkto:#loc4;spotgroup:group-point4;
+						nameLink:Ladder;"
+							position="4 -2.5 0"
+							rotation="90 90 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p3loc13spot"
+							class="arrowPointer"
+							spot="linkto:#loc13;spotgroup:group-point13;
+						nameLink:Extinguisher;"
+							position="-1.4 -2.5 -7.8"
+							rotation="90 180 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point4" visible="false">
+						<a-image
+							id="p4loc3spot"
+							class="arrowPointer"
+							spot="linkto:#loc3;spotgroup:group-point3;
+						nameLink:Doorway;"
+							position="-3.3 -2.5 0.3"
+							rotation="90 275 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p4loc5spot"
+							class="arrowPointer"
+							spot="linkto:#loc5;spotgroup:group-point5;
+						nameLink:LCP201;"
+							position="3.7 -2.5 -0.4"
+							rotation="90 95 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p4loc12spot"
+							class="arrowPointer"
+							spot="linkto:#loc12;spotgroup:group-point12;
+						nameLink:T102;"
+							position="-0.3 -2.5 -3.5"
+							rotation="90 185 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dialog3"
+							position="-4 0.5 -3"
+							dialog-popup="
+						title: LCP-101 Gas Absorption System;
+						body: 1. Press the ESD red button.\n\n2. Blower, B-101, Pump P-101, P-102 and heater, H-101 will stop automatically.\n\n3. Go to Local Control Panel, LCP-201 Solvent Extraction System;
+						multiple: true;
+						previousDialog: dialog2;		  
+						image: hotspots/SOP1.png;"
+						></a-entity>
+					</a-entity>
+					<a-entity id="group-point5" visible="false">
+						<a-image
+							id="p5loc4spot"
+							class="arrowPointer"
+							spot="linkto:#loc4;spotgroup:group-point4;
+						nameLink:Ladder;"
+							position="-3.2 -2.5 0.6"
+							rotation="90 280 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p5loc6spot"
+							class="arrowPointer"
+							spot="linkto:#loc6;spotgroup:group-point6;
+						nameLink:Center;"
+							position="5 -2.5 -1"
+							rotation="90 100 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dialog4"
+							position="-1.2 0.5 -3.7"
+							dialog-popup="
+						title: LCP-201 Solvent Extraction System;
+						body: 1. Press the ESD red button.\n\n2. Pump P-201, P-202 and P-203 will stop automatically.;
+						multiple: true;
+						previousDialog: dialog3;		  
+						image: hotspots/SOP2.png;"
+						></a-entity>
+					</a-entity>
+					<a-entity id="group-point6" visible="false">
+						<a-image
+							id="p6loc5spot"
+							class="arrowPointer"
+							spot="linkto:#loc5;spotgroup:group-point5;
+						nameLink:LCP201;"
+							position="-5.2 -2.5 0.8"
+							rotation="90 275 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p6loc7spot"
+							class="arrowPointer"
+							spot="linkto:#loc7;spotgroup:group-point7;
+						nameLink:LCP302;"
+							position="0.8 -2.5 -5"
+							rotation="90 190 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point7" visible="false">
+						<a-image
+							id="p7loc6spot"
+							class="arrowPointer"
+							spot="linkto:#loc6;spotgroup:group-point6;
+						nameLink:Center;"
+							position="-3 -2.5 4.3"
+							rotation="90 330 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p7loc8spot"
+							class="arrowPointer"
+							spot="linkto:#loc8;spotgroup:group-point8;
+						nameLink:Platform;"
+							position="0.5 -2.5 -4"
+							rotation="90 170 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dialog2"
+							position="-4.2 0 -4.2"
+							dialog-popup="
+						title: LCP-301 Vacuum Distillation System;
+						body: 1. Press the ESD red button.\n\n2. Pump P-301, P302, P-303A/B and P-305 will stop automatically.\n\n3. Go to Local Control Panel, LCP-101 Gas Absorption System;
+						multiple: true;
+						previousDialog: dialog1;	
+						image: hotspots/SOP3.png;"
+						>
+						</a-entity>
+					</a-entity>
+					<a-entity id="group-point8" visible="false">
+						<a-image
+							id="p8loc7spot"
+							class="arrowPointer"
+							spot="linkto:#loc7;spotgroup:group-point7;
+						nameLink:LCP302;"
+							position="-0.9 -2.5 4"
+							rotation="90 340 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p8loc9spot"
+							class="arrowPointer"
+							spot="linkto:#loc9;spotgroup:group-point9;
+						nameLink:C301;"
+							position="-4.7 -2.5 0"
+							rotation="90 250 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p8loc15spot"
+							class="arrowPointer"
+							spot="linkto:#loc15;spotgroup:group-point15;
+						nameLink:Pathway;"
+							position="4.8 -2.5 -3"
+							rotation="90 130 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point9" visible="false">
+						<a-image
+							id="p9loc8spot"
+							class="arrowPointer"
+							spot="linkto:#loc8;spotgroup:group-point8;
+						nameLink:Platform;"
+							position="3.7 -2.5 -1.1"
+							rotation="90 110 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p9loc10spot"
+							class="arrowPointer"
+							spot="linkto:#loc10;spotgroup:group-point10;
+						nameLink:T301;"
+							position="-2 -2.5 1.3"
+							rotation="90 300 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dial1"
+							position="-4.15 0.6 -4.3"
+							dialog-popup="
+						title: C-301 Distillation Column;
+						image: hotspots/unavailable.jpeg;
+						"
+						>
+						</a-entity>
+					</a-entity>
+					<a-entity id="group-point10" visible="false">
+						<a-image
+							id="p10loc9spot"
+							class="arrowPointer"
+							spot="linkto:#loc9;spotgroup:group-point9;
+						nameLink:C301;"
+							position="1.3 -2.5 -1.8"
+							rotation="90 135 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p10loc11spot"
+							class="arrowPointer"
+							spot="linkto:#loc11;spotgroup:group-point11;
+						nameLink:C201;"
+							position="2.6 -2.5 2.5"
+							rotation="90 45 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point11" visible="false">
+						<a-image
+							id="p11loc10spot"
+							class="arrowPointer"
+							spot="linkto:#loc10;spotgroup:group-point10;
+						nameLink:T301;"
+							position="-2.5 -2.5 -2.4"
+							rotation="90 230 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p11loc12spot"
+							class="arrowPointer"
+							spot="linkto:#loc12;spotgroup:group-point12;
+						nameLink:T102;"
+							position="-5.2 -2.5 1.6"
+							rotation="90 280 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dial2"
+							position="3.3 -0.2 3.7"
+							dialog-popup="
+						title: C-201 Extraction Column;
+						image: hotspots/unavailable.jpeg;
+						"
+						>
+						</a-entity>
+					</a-entity>
+					<a-entity id="group-point12" visible="false">
+						<a-image
+							id="p12loc11spot"
+							class="arrowPointer"
+							spot="linkto:#loc11;spotgroup:group-point11;
+						nameLink:C201;"
+							position="5.8 -2.5 -1.2"
+							rotation="90 90 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p12loc4spot"
+							class="arrowPointer"
+							spot="linkto:#loc4;spotgroup:group-point4;
+						nameLink:Ladder;"
+							position="0.5 -2.5 2.7"
+							rotation="90 0 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dial3"
+							position="-4.4 0.5 -0.16"
+							dialog-popup="
+						title: C-101 Absorption Column;
+						image: hotspots/Tag.png;
+						"
+						>
+						</a-entity>
+						<a-entity
+							id="dial4"
+							position="2.8 -2 -2.4"
+							dialog-popup="
+						title: T-102 Wet EG Tank;
+						image: hotspots/Wet EG tank.png;
+						"
+						>
+						</a-entity>
+					</a-entity>
+					<a-entity id="group-point13" visible="false">
+						<a-image
+							id="p13loc3spot"
+							class="arrowPointer"
+							spot="linkto:#loc3;spotgroup:group-point3;
+						nameLink:Doorway;"
+							position="0.5 -2 8"
+							rotation="90 0 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p13loc14spot"
+							class="arrowPointer"
+							spot="linkto:#loc14;spotgroup:group-point14;
+						nameLink:Lab;"
+							position="2.5 -2 -3.6"
+							rotation="90 145 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-entity
+							id="dialog1"
+							position="3.5 -1 -2"
+							dialog-popup="
+						title: H-401 Thermal Fluid Heating;
+						body: 1. Press the ESD red button to shut down thermal fluid system.\n\n2. Go to Local Control Panel, LCP-301 Vacuum Distillation System;
+						multiple: true;
+						image: hotspots/ESD.png;
+						"
+						>
+						</a-entity>
+					</a-entity>
+					<a-entity id="group-point14" visible="false">
+						<a-image
+							id="p14loc13spot"
+							class="arrowPointer"
+							spot="linkto:#loc13;spotgroup:group-point13;
+						nameLink:Extinguisher;"
+							position="-5.8 -3 1.2"
+							rotation="90 280 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p14loc15spot"
+							class="arrowPointer"
+							spot="linkto:#loc15;spotgroup:group-point15;
+						nameLink:Pathway;"
+							position="8 -2 4"
+							rotation="90 60 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+					<a-entity id="group-point15" visible="false">
+						<a-image
+							id="p15loc8spot"
+							class="arrowPointer"
+							spot="linkto:#loc8;spotgroup:group-point8;
+						nameLink:Platform;"
+							position="-1.7 -2.5 3.5"
+							rotation="90 335 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+						<a-image
+							id="p15loc14spot"
+							class="arrowPointer"
+							spot="linkto:#loc14;spotgroup:group-point14;
+						nameLink:Lab;"
+							position="-7.8 -2 -4.4"
+							rotation="90 240 0"
+							scale="0.9 0.9 0.9"
+						></a-image>
+					</a-entity>
+				</a-entity>
+			</a-scene>
+		</div>
+	</body>
+</html>
